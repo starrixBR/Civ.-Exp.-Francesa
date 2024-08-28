@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Racismo Estrutural</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #72687e;
+            color: #000000;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #bb9f9f;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(5, 5, 5, 0.1);
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .question label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .question input {
+            margin-right: 10px;
+        }
+        .results {
+            text-align: center;
+            margin-top: 30px;
+        }
+        #messageBoard {
+            margin-top: 50px;
+        }
+        .message {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; font-size: 24px;">
+        Projeto de Civilização de Expressão Francesa, 2024.1 - Eduardo de Melo Cavalcante
+    </div>
+  
+    <div class="container">
+        <h1>Calculadora de Racismo Estrutural</h1>
+        <form id="quizForm">
+            <div class="question">
+                <label for="nome">Digite seu nome:</label>
+                <input type="text" id="nome" required>
+            </div>
+            <div id="questionsContainer">
+                <!-- Questions will be inserted here by JavaScript -->
+            </div>
+            <button type="submit">Enviar</button>
+        </form>
+        <div class="results" id="results">
+            <!-- Results will be displayed here -->
+        </div>
+    </div>
+
+    <div id="messageBoard" class="container">
+        <h2>Mural de Mensagens</h2>
+        <form id="messageForm">
+            <input type="text" id="messageName" placeholder="Seu nome" required>
+            <textarea id="messageText" placeholder="Sua mensagem" required></textarea>
+            <button type="submit">Enviar Mensagem</button>
+        </form>
+        <div id="messages">
+            <!-- Messages will be displayed here -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Perguntas e quiz
+            const perguntas = [
+                "Você segura seu pertence firmemente quando uma pessoa negra passa perto de você?",
+                "Você atravessa para o outro lado da rua ao ver uma pessoa negra vindo em sua direção?",
+                "Você assume que uma pessoa negra em um ambiente de trabalho está em um cargo inferior?",
+                "Você faz comentários desrespeitosos ou estereotipados sobre o cabelo, vestuário ou cultura de colegas?",
+                "Você frequentemente pergunta a estrangeiros sobre algo aleatório relacionado ao seu continente, assumindo que eles sabem de tudo que aconteceu lá?",
+                "Você se comporta de forma paternalista ou condescendente com pessoas de outras culturas, como se elas precisassem de sua orientação?",
+                "Você assume que uma pessoa estrangeira tem conhecimentos ou habilidades específicas simplesmente por causa de sua nacionalidade ou origem étnica?",
+                "Você acha que negros são mais geneticamente propensos ao diabetes ou outros tipos de doença?",
+                "Você usa a presença de uma pessoa de uma minoria para parecer que não é racista?",
+                "Você usa saudações estereotipadas para pessoas de outras nacionalidades ou origem étnica?"
+            ];
+
+            const respostasCorretas = ["s", "s", "s", "s", "s", "s", "s", "s", "s", "s"];
+            const questionsContainer = document.getElementById("questionsContainer");
+
+            perguntas.forEach((pergunta, index) => {
+                const div = document.createElement("div");
+                div.className = "question";
+                div.innerHTML = `
+                    <label>${index + 1}- ${pergunta}</label>
+                    <input type="radio" name="q${index}" value="s" required> Sim
+                    <input type="radio" name="q${index}" value="n" required> Não
+                `;
+                questionsContainer.appendChild(div);
+            });
+
+            const form = document.getElementById("quizForm");
+            form.addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const nome = document.getElementById("nome").value;
+                let pontos = 0;
+
+                perguntas.forEach((_, index) => {
+                    const resposta = document.querySelector(`input[name="q${index}"]:checked`).value;
+                    if (resposta === respostasCorretas[index]) {
+                        pontos++;
+                    }
+                });
+
+                let resultado = "";
+                if (pontos >= 7) {
+                    resultado = `Nossa, ${nome}! Você marcou ${pontos} de ${perguntas.length} perguntas. 🔥 A fogueira te espera! 🔥`;
+                } else if (pontos >= 4 && pontos <= 6) {
+                    resultado = `Você marcou ${pontos} de ${perguntas.length} perguntas. Muito racista, ${nome}! ☠️☢️☠️ Você será eutanasiado com um coquetel de polônio 210, cianeto e arsênico. ☠️☢️☠️`;
+                } else if (pontos >= 1 && pontos <= 3) {
+                    resultado = `UFA, ${nome}!!! Você só marcou ${pontos} de ${perguntas.length} perguntas. Você não é tão racista assim, mas ainda será automaticamente matriculado na matéria de civilização de expressão francesa. ✏️📚`;
+                } else {
+                    resultado = `${nome}, você conseguiu um grande feito de ter marcado ${pontos} de ${perguntas.length} perguntas. Você será poupado, mas por enquanto! 🤨🔎`;
+                }
+
+                document.getElementById("results").innerText = resultado;
+            });
+
+            // Mural de mensagens
+            const messages = [];
+
+            document.getElementById("messageForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const name = document.getElementById("messageName").value;
+                const text = document.getElementById("messageText").value;
+                const date = new Date().toLocaleString();
+
+                const newMessage = { name, text, date };
+                messages.push(newMessage);
+                displayMessages();
+
+                document.getElementById("messageForm").reset();
+            });
+
+            function displayMessages() {
+                const messagesDiv = document.getElementById("messages");
+                messagesDiv.innerHTML = '';
+                messages.forEach(msg => {
+                    const div = document.createElement("div");
+                    div.className = "message";
+                    div.innerHTML = `<strong>${msg.name}:</strong> ${msg.text} <br><small>${msg.date}</small>`;
+                    messagesDiv.appendChild(div);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
